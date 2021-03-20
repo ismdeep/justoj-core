@@ -1,0 +1,137 @@
+{
+  "query_size": 10,
+  "running_size": 1,
+  "sleep_time": 1,
+  "client_name": "honix",
+  "cpu_compensation": 1,
+  "java_time_bonus": 2,
+  "java_memory_bonus": 64,
+  "java_xms": "-Xms64M",
+  "java_xmx": "-Xmx128M",
+  "base_url": "https://oj.ismdeep.com",
+  "data": "/justoj-data/data",
+  "client": "/justoj-bin/justoj-core-client",
+  "secure_code": "",
+  "languages": [
+    {
+      "id": 0,
+      "lang": "C",
+      "enabled": false,
+      "shell": ""
+    },
+    {
+      "id": 1,
+      "lang": "C++",
+      "enabled": false,
+      "shell": ""
+    },
+    {
+      "id": 2,
+      "lang": "Pascal",
+      "enabled": false,
+      "shell": ""
+    },
+    {
+      "id": 3,
+      "lang": "Java",
+      "enabled": false,
+      "shell": ""
+    },
+    {
+      "id": 4,
+      "lang": "Ruby",
+      "enabled": false,
+      "shell": ""
+    },
+    {
+      "id": 5,
+      "lang": "Bash",
+      "enabled": false,
+      "shell": ""
+    },
+    {
+      "id": 6,
+      "lang": "Python 2",
+      "enabled": false,
+      "shell": ""
+    },
+    {
+      "id": 7,
+      "lang": "PHP",
+      "enabled": false,
+      "shell": ""
+    },
+    {
+      "id": 8,
+      "lang": "Perl",
+      "enabled": false,
+      "shell": ""
+    },
+    {
+      "id": 9,
+      "lang": "C#",
+      "enabled": true,
+      "shell": ""
+    },
+    {
+      "id": 10,
+      "lang": "Objective-C",
+      "enabled": false,
+      "shell": ""
+    },
+    {
+      "id": 11,
+      "lang": "Free Basic",
+      "enabled": false,
+      "shell": ""
+    },
+    {
+      "id": 12,
+      "lang": "Scheme(Guile)",
+      "enabled": false,
+      "shell": "/usr/bin/guile"
+    },
+    {
+      "id": 13,
+      "lang": "Clang",
+      "enabled": false,
+      "shell": ""
+    },
+    {
+      "id": 14,
+      "lang": "Clang++",
+      "enabled": false,
+      "shell": ""
+    },
+    {
+      "id": 15,
+      "lang": "Lua",
+      "enabled": false,
+      "shell": ""
+    },
+    {
+      "id": 16,
+      "lang": "Javascript",
+      "enabled": false,
+      "shell": ""
+    },
+    {
+      "id": 17,
+      "lang": "Go",
+      "enabled": false,
+      "shell": ""
+    },
+    {
+      "id": 18,
+      "lang": "Python 3",
+      "enabled": false,
+      "shell": "/usr/local/python3/bin/python3.7"
+    },
+    {
+      "id": 19,
+      "lang": "Lisp(SBCL)",
+      "enabled": false,
+      "shell": "/usr/bin/sbcl"
+    }
+  ]
+}
