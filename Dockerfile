@@ -6,7 +6,7 @@ RUN set -eux; \
     git clone https://github.com/ismdeep/justoj-core-client.git .; \
     git clone https://github.com/ismdeep/ismdeep-c-utils.git    vendor/ismdeep-c-utils; \
     git clone https://github.com/ismdeep/log.h.git              vendor/log.h; \
-    cmake; \
+    cmake .; \
     make
 
 
