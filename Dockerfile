@@ -22,4 +22,4 @@ ENV JUSTOJ_CORE_ROOT /service
 COPY --from=client-builder /src/justoj-core-client   /usr/bin/justoj-core-client
 COPY --from=client-builder /src/justoj-cpu-benchmark /usr/bin/justoj-cpu-benchmark
 COPY --from=core-builder   /src/main                 /usr/bin/justoj-core
-CMD ["/usr/bin/justoj-core"]
+CMD ["justoj-core"]

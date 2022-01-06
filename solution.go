@@ -9,8 +9,13 @@ import (
 )
 
 func GetPendingSolutions() ([]string, error) {
+	ids := GetAvailableLanguageIDs()
+	if len(ids) <= 0 {
+		return nil, errors.New("no language supported")
+	}
+
 	h := &http.Client{}
-	resp, err := h.Get(fmt.Sprintf("%v/api/judge_api/get_pending?query_size=10&secure_code=%v&oj_lang_set=1,2,3", Config.BaseUrl, Config.SecureCode))
+	resp, err := h.Get(fmt.Sprintf("%v/api/judge_api/get_pending?query_size=10&secure_code=%v&oj_lang_set=%v", Config.BaseUrl, Config.SecureCode, strings.Join(ids, ",")))
 	if err != nil {
 		return nil, err
 	}
