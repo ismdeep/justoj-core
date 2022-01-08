@@ -24,7 +24,7 @@ RUN set -eux; \
     /usr/sbin/useradd -m -u 1536 judge; \
     apt-get update; \
     apt-get upgrade -y; \
-    apt-get install -y curl gcc g++ make cmake gdb openjdk-11-jdk sbcl guile-2.2 php-cli lua5.1 fp-compiler ruby mono-mcs python2 python3; \
+    apt-get install -y curl gcc g++ clang make cmake gdb openjdk-11-jdk sbcl guile-2.2 php-cli lua5.1 fp-compiler ruby mono-mcs python2 python3; \
     cd /opt; \
     curl -LO https://dl.google.com/go/go1.16.7.linux-amd64.tar.gz; \
     tar -zxvf go1.16.7.linux-amd64.tar.gz; \
