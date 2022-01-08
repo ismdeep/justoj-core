@@ -8,7 +8,7 @@ import (
 )
 
 type config struct {
-	BaseUrl    string `yaml:"base_url"`    // OJ网址
+	BaseURL    string `yaml:"base_url"`    // OJ网址
 	SecureCode string `yaml:"secure_code"` // 服务器用于判题机认证的Secure Code，存放在 justoj 项目的 .env 文件中
 }
 

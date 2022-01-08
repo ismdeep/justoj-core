@@ -6,6 +6,8 @@ github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSs
 github.com/google/renameio v0.1.0/go.mod h1:KWCgfxg9yswjAJkECMjeO8J8rahYeXnNhOm40UhjYkI=
 github.com/ismdeep/log v0.0.5 h1:CGS+NmB2DGYyyBReabpo15B8zFdv02KwkypQP4WyTYE=
 github.com/ismdeep/log v0.0.5/go.mod h1:dh/C6WCi6b915lovFMqMMhpaFwBWZaF/WTTyY5qxyyo=
+github.com/ismdeep/rand v0.2.20210918085949 h1:1C0ipeLF2SDMoWclBPH8vjMYfBphzEV0ncuqyH+O5/k=
+github.com/ismdeep/rand v0.2.20210918085949/go.mod h1:PLgcux83EdJNeTQPFPoV9TZfM+8Tqe6acCJLEtH9in0=
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
 github.com/kr/pretty v0.1.0 h1:L/CwN0zerZDmRFUapSPitk6f+Q3+0za1rQkzVuMiMFI=
 github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORNo=
