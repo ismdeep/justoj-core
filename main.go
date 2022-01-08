@@ -111,7 +111,7 @@ func SolutionJudge(solutionID string) error {
 
 	// 2. 执行判题 justoj-core-client -d ${WorkDir}/run/${solution_id}-${rand-hex}
 
-	cmd := exec.Command("/usr/bin/justoj-core-client", "-d", runDir)
+	cmd := exec.Command("justoj-core-client", "-d", runDir)
 	if err := cmd.Start(); err != nil {
 		return err
 	}
