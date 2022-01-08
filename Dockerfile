@@ -24,17 +24,18 @@ RUN set -eux; \
     /usr/sbin/useradd -m -u 1536 judge; \
     apt-get update; \
     apt-get upgrade -y; \
-    apt-get install -y gcc g++ make cmake gdb openjdk-11-jdk sbcl guile-2.2 php-cli lua5.1 fp-compiler ruby mono-mcs python2 python3; \
+    apt-get install -y curl gcc g++ make cmake gdb openjdk-11-jdk sbcl guile-2.2 php-cli lua5.1 fp-compiler ruby mono-mcs python2 python3; \
     cd /opt; \
-    axel https://dl.google.com/go/go1.16.7.linux-amd64.tar.gz; \
+    curl -LO https://dl.google.com/go/go1.16.7.linux-amd64.tar.gz; \
     tar -zxvf go1.16.7.linux-amd64.tar.gz; \
     rm -f go1.16.7.linux-amd64.tar.gz; \
     cd /opt; \
-    axel https://nodejs.org/dist/v14.17.5/node-v14.17.5-linux-x64.tar.xz; \
+    curl -LO https://nodejs.org/dist/v14.17.5/node-v14.17.5-linux-x64.tar.xz; \
     xz -d node-v14.17.5-linux-x64.tar.xz; \
     tar -xvf node-v14.17.5-linux-x64.tar; \
     rm -f node-v14.17.5-linux-x64.tar; \
-    mv node-v14.17.5-linux-x64 node
+    mv node-v14.17.5-linux-x64 node; \
+    rm -rf /var/lib/apt/lists/*
 COPY --from=client-builder /src/justoj-core-client   /usr/bin/justoj-core-client
 COPY --from=client-builder /src/justoj-cpu-benchmark /usr/bin/justoj-cpu-benchmark
 COPY --from=core-builder   /src/main                 /usr/bin/justoj-core
