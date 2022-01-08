@@ -1,4 +1,4 @@
-FROM hub.deepin.com/public/uniteos:2021 AS client-builder
+FROM debian:bullseye AS client-builder
 WORKDIR /src
 RUN set -eux; \
     apt-get update; \
@@ -10,13 +10,13 @@ RUN set -eux; \
     make
 
 
-FROM hub.deepin.com/library/golang:bullseye AS core-builder
+FROM golang:bullseye AS core-builder
 WORKDIR /src
 COPY . .
 RUN go build -o main github.com/ismdeep/justoj-core
 
 
-FROM hub.deepin.com/public/uniteos:2021
+FROM debian:bullseye
 WORKDIR /service
 ENV JUSTOJ_CORE_ROOT /service
 COPY --from=client-builder /src/justoj-core-client   /usr/bin/justoj-core-client
