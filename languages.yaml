@@ -1,60 +1,60 @@
 - id: 0
   name: 'C'
-  enable: false
+  enable: true
 - id: 1
   name: 'C++'
-  enable: false
+  enable: true
 - id: 2
   name: 'Pascal'
-  enable: false
+  enable: true
 - id: 3
   name: 'Java'
   enable: true
 - id: 4
   name: 'Ruby'
-  enable: false
+  enable: true
 - id: 5
   name: 'Bash'
-  enable: false
+  enable: true
 - id: 6
   name: 'Python 2'
-  enable: false
+  enable: true
 - id: 7
   name: 'PHP'
-  enable: false
+  enable: true
 - id: 8
   name: 'Perl'
-  enable: false
+  enable: true
 - id: 9
   name: 'C#'
-  enable: false
+  enable: true
 - id: 10
   name: 'Objective-C'
-  enable: false
+  enable: true
 - id: 11
   name: 'Free Basic'
-  enable: false
+  enable: true
 - id: 12
   name: 'Scheme(Guile)'
-  enable: false
+  enable: true
 - id: 13
   name: 'Clang'
-  enable: false
+  enable: true
 - id: 14
   name: 'Clang++'
-  enable: false
+  enable: true
 - id: 15
   name: 'Lua'
-  enable: false
+  enable: true
 - id: 16
   name: 'Javascript'
-  enable: false
+  enable: true
 - id: 17
   name: 'Go'
-  enable: false
+  enable: true
 - id: 18
   name: 'Python 3'
-  enable: false
+  enable: true
 - id: 19
   name: 'Lisp(SBCL)'
-  enable: false
+  enable: true
