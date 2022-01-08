@@ -223,13 +223,11 @@ func GetCPUBench() (string, error) {
 }
 
 func main() {
-	cpuCompensation = "0.8"
-
-	//var err error
-	//cpuCompensation, err = GetCPUBench()
-	//if err != nil {
-	//	panic(err)
-	//}
+	var err error
+	cpuCompensation, err = GetCPUBench()
+	if err != nil {
+		panic(err)
+	}
 
 	go SolutionCleanWorker()
 	go SolutionJudgeWorker()

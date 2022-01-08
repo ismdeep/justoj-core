@@ -1,5 +1,5 @@
-PYTHON2=/usr/local/python2/bin/python2.7
-PYTHON3=/usr/local/python3/bin/python3.7
+PYTHON2=/usr/bin/python2.7
+PYTHON3=/usr/bin/python3.9
 GUILE=/usr/bin/guile
 SBCL=/usr/bin/sbcl
 JAVA=/usr/bin/java
