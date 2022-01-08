@@ -1,12 +1,24 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strings"
 )
+
+func GenerateURL(uri string, params map[string]interface{}) string {
+	l := make([]string, 0)
+	l = append(l, fmt.Sprintf("client_name=%v", ClientName))
+	l = append(l, fmt.Sprintf("secure_code=%v", Config.SecureCode))
+	for key, value := range params {
+		l = append(l, fmt.Sprintf("%v=%v", key, value))
+	}
+	return fmt.Sprintf("%v%v?%v", Config.BaseURL, uri, strings.Join(l, "&"))
+}
 
 func GetPendingSolutions() ([]string, error) {
 	ids := GetAvailableLanguageIDs()
@@ -15,7 +27,10 @@ func GetPendingSolutions() ([]string, error) {
 	}
 
 	h := &http.Client{}
-	resp, err := h.Get(fmt.Sprintf("%v/api/judge_api/get_pending?query_size=10&secure_code=%v&oj_lang_set=%v", Config.BaseURL, Config.SecureCode, strings.Join(ids, ",")))
+	resp, err := h.Get(GenerateURL("/api/judge_api/get_pending", map[string]interface{}{
+		"query_size":  10,
+		"oj_lang_set": strings.Join(ids, ","),
+	}))
 	if err != nil {
 		return nil, err
 	}
@@ -47,7 +62,9 @@ func GetPendingSolutions() ([]string, error) {
 
 func GetSolutionInfo(solutionID string) (*SolutionInfo, error) {
 	h := &http.Client{}
-	resp, err := h.Get(fmt.Sprintf("%v/api/judge_api/get_solution_info?sid=%v&secure_code=%v", Config.BaseURL, solutionID, Config.SecureCode))
+	resp, err := h.Get(GenerateURL("/api/judge_api/get_solution_info", map[string]interface{}{
+		"sid": solutionID,
+	}))
 	if err != nil {
 		return nil, err
 	}
@@ -70,7 +87,9 @@ func GetSolutionInfo(solutionID string) (*SolutionInfo, error) {
 
 func GetProblemInfo(problemID string) (*ProblemInfo, error) {
 	h := &http.Client{}
-	resp, err := h.Get(fmt.Sprintf("%v/api/judge_api/get_problem_info?secure_code=%v&pid=%v", Config.BaseURL, Config.SecureCode, problemID))
+	resp, err := h.Get(GenerateURL("/api/judge_api/get_problem_info", map[string]interface{}{
+		"pid": problemID,
+	}))
 	if err != nil {
 		return nil, err
 	}
@@ -93,7 +112,9 @@ func GetProblemInfo(problemID string) (*ProblemInfo, error) {
 
 func GetSolutionSourceCode(solutionID string) (string, error) {
 	h := &http.Client{}
-	resp, err := h.Get(fmt.Sprintf("%v/api/judge_api/get_solution?secure_code=%v&sid=%v", Config.BaseURL, Config.SecureCode, solutionID))
+	resp, err := h.Get(GenerateURL("/api/judge_api/get_solution", map[string]interface{}{
+		"sid": solutionID,
+	}))
 	if err != nil {
 		return "", err
 	}
@@ -102,4 +123,37 @@ func GetSolutionSourceCode(solutionID string) (string, error) {
 		return "", err
 	}
 	return string(content), nil
+}
+
+func UpdateSolutionResult(res *SolutionResult) error {
+
+	if _, err := (&http.Client{}).Get(GenerateURL("/api/judge_api/update_solution", map[string]interface{}{
+		"sid":    res.SolutionID,
+		"result": res.Result,
+		"time":   res.MaxTime,
+		"memory": res.MaxMem / 1024,
+	})); err != nil {
+		return err
+	}
+
+	if res.Result == ResultCompileError {
+		data := struct {
+			CeInfo string `json:"ceinfo"`
+		}{
+			CeInfo: res.CompileError,
+		}
+		content, err := json.Marshal(data)
+		if err != nil {
+			return err
+		}
+		if _, err := (&http.Client{}).Post(GenerateURL("/api/judge_api/add_ce_info", map[string]interface{}{
+			"sid": res.SolutionID,
+		}),
+			"application/json",
+			bytes.NewReader(content)); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/ismdeep/log"
 	"github.com/ismdeep/rand"
@@ -51,12 +52,11 @@ func SolutionCleanWorker() {
 	}
 }
 
-func SolutionJudge(solutionID string) error {
+func SolutionJudge(solutionID string) (*SolutionResult, error) {
 	runHexID := rand.HexStr(32)
 	runDir := fmt.Sprintf("%v/run/%v-%v", WorkDir, solutionID, runHexID)
-	fmt.Println(runDir)
 	if err := os.MkdirAll(runDir, 0777); err != nil {
-		return err
+		return nil, err
 	}
 	defer func() {
 		// 清理目录
@@ -67,11 +67,11 @@ func SolutionJudge(solutionID string) error {
 	// 1. 准备数据 ${WorkDir}/run/${solution_id}-${rand-hex}
 	solutionInfo, err := GetSolutionInfo(solutionID)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	problemInfo, err := GetProblemInfo(solutionInfo.ProblemID)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	spjV := 0
 	if problemInfo.Spj {
@@ -84,71 +84,119 @@ func SolutionJudge(solutionID string) error {
 			cpuCompensation,          // CPU_COMPENSATION
 			problemInfo.TimeLimit,    // TIME_LIMIT
 			problemInfo.MemoryLimit), // MEMORY_LIMIT
-		), 0700); err != nil {
-		return err
+		), 0777); err != nil {
+		return nil, err
 	}
 
 	cmdCopy := exec.Command(
 		"cp",
 		"-r",
 		"-v",
-		fmt.Sprintf("/data/justoj-data/data/%v", problemInfo.ID),
+		fmt.Sprintf("%v/justoj-data/data/%v", WorkDir, problemInfo.ID),
 		fmt.Sprintf("%v/data", runDir))
 	if err := cmdCopy.Start(); err != nil {
-		return err
+		return nil, err
 	}
 	if err := cmdCopy.Wait(); err != nil {
-		return err
+		return nil, err
 	}
 
 	src, err := GetSolutionSourceCode(solutionID)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if err := ioutil.WriteFile(fmt.Sprintf("%v/code", runDir), []byte(src), 0777); err != nil {
-		return err
+		return nil, err
 	}
 
 	// 2. 执行判题 justoj-core-client -d ${WorkDir}/run/${solution_id}-${rand-hex}
 
 	cmd := exec.Command("justoj-core-client", "-d", runDir)
 	if err := cmd.Start(); err != nil {
-		return err
+		return nil, err
 	}
 	if err := cmd.Wait(); err != nil {
-		return err
+		return nil, err
 	}
 
 	// 3. 解析结果 ${WorkDir}/run/${solution_id}-${rand-hex}/run/results.txt
 	compileErr, err := ioutil.ReadFile(fmt.Sprintf("%v/run/ce.txt", runDir))
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if string(compileErr) != "" {
-		fmt.Println(string(compileErr))
-		return nil
+		return &SolutionResult{
+			SolutionID:     solutionID,
+			RunDir:         runDir,
+			Result:         ResultCompileError,
+			CompileError:   string(compileErr),
+			ResultInfoList: nil,
+			MaxTime:        0,
+			MaxMem:         0,
+		}, nil
 	}
 
 	content, err := ioutil.ReadFile(fmt.Sprintf("%v/run/results.txt", runDir))
 	if err != nil {
-		return err
+		return nil, err
+	}
+	results := make([]*ResultInfo, 0)
+	if err := json.Unmarshal(content, &results); err != nil {
+		return nil, err
 	}
 
-	fmt.Println(string(content))
+	if len(results) <= 0 {
+		return &SolutionResult{
+			SolutionID:     solutionID,
+			RunDir:         runDir,
+			Result:         ResultAccepted,
+			CompileError:   "",
+			ResultInfoList: nil,
+			MaxTime:        0,
+			MaxMem:         0,
+		}, nil
+	}
 
-	return nil
+	result := ResultAccepted
+	maxTime := int64(0)
+	maxMem := int64(0)
+	for _, v := range results {
+		if v.Time > maxTime {
+			maxTime = v.Time
+		}
+		if v.Mem > maxMem {
+			maxMem = v.Mem
+		}
+		if v.Result != ResultAccepted {
+			result = v.Result
+			break
+		}
+	}
+
+	return &SolutionResult{
+		SolutionID:     solutionID,
+		RunDir:         runDir,
+		Result:         result,
+		CompileError:   "",
+		ResultInfoList: results,
+		MaxTime:        maxTime,
+		MaxMem:         maxMem,
+	}, nil
 }
 
 func SolutionJudgeWorker() {
 	for {
 		solutionID := <-solutionQueue
-		// 等待判题结果
-
-		if err := SolutionJudge(solutionID); err != nil {
+		result, err := SolutionJudge(solutionID)
+		if err != nil {
 			log.Error("SolutionJudgeWorker", log.FieldErr(err))
+			continue
 		}
 
-		//fmt.Printf("solution judge done. [%v]\n", solutionID)
+		fmt.Printf("Solution: %v    Result: %18v    Time: %6v    Mem: %10v    @    %v\n", result.SolutionID, ResultText[result.Result], result.MaxTime, result.MaxMem, result.RunDir)
+		if err := UpdateSolutionResult(result); err != nil {
+			log.Error("SolutionJudgeWorker", log.FieldErr(err))
+		}
 		delete(solutionTimeoutMap, solutionID)
 	}
 }
@@ -175,11 +223,13 @@ func GetCPUBench() (string, error) {
 }
 
 func main() {
-	var err error
-	cpuCompensation, err = GetCPUBench()
-	if err != nil {
-		panic(err)
-	}
+	cpuCompensation = "0.8"
+
+	//var err error
+	//cpuCompensation, err = GetCPUBench()
+	//if err != nil {
+	//	panic(err)
+	//}
 
 	go SolutionCleanWorker()
 	go SolutionJudgeWorker()
