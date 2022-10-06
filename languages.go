@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"gopkg.in/yaml.v3"
 	"io/ioutil"
+
+	"gopkg.in/yaml.v3"
 )
 
 type languageInfo struct {
@@ -12,6 +13,7 @@ type languageInfo struct {
 	Enable bool   `yaml:"enable"`
 }
 
+// Languages slice
 var Languages []languageInfo
 
 func init() {
@@ -25,6 +27,7 @@ func init() {
 	}
 }
 
+// GetAvailableLanguageIDs get language id list
 func GetAvailableLanguageIDs() []string {
 	ids := make([]string, 0)
 	for _, info := range Languages {

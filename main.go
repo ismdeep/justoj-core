@@ -3,13 +3,14 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/ismdeep/log"
-	"github.com/ismdeep/rand"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"strings"
 	"time"
+
+	"github.com/ismdeep/log"
+	"github.com/ismdeep/rand"
 )
 
 var solutionQueue chan string
@@ -21,6 +22,7 @@ func init() {
 	solutionTimeoutMap = make(map[string]int64)
 }
 
+// SolutionPullWorker worker
 func SolutionPullWorker() {
 	for {
 		solutionIDs, err := GetPendingSolutions()
@@ -41,6 +43,7 @@ func SolutionPullWorker() {
 	}
 }
 
+// SolutionCleanWorker clean worker
 func SolutionCleanWorker() {
 	for {
 		for key, v := range solutionTimeoutMap {
@@ -52,6 +55,7 @@ func SolutionCleanWorker() {
 	}
 }
 
+// SolutionJudge judge
 func SolutionJudge(solutionID string) (*SolutionResult, error) {
 	runHexID := rand.HexStr(32)
 	runDir := fmt.Sprintf("%v/run/%v-%v", WorkDir, solutionID, runHexID)
@@ -184,6 +188,7 @@ func SolutionJudge(solutionID string) (*SolutionResult, error) {
 	}, nil
 }
 
+// SolutionJudgeWorker worker
 func SolutionJudgeWorker() {
 	for {
 		solutionID := <-solutionQueue

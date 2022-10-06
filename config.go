@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/ismdeep/rand"
-	"gopkg.in/yaml.v3"
 	"io/ioutil"
 	"os"
+
+	"github.com/ismdeep/rand"
+	"gopkg.in/yaml.v3"
 )
 
 type config struct {
@@ -13,8 +14,13 @@ type config struct {
 	SecureCode string `yaml:"secure_code"` // 服务器用于判题机认证的Secure Code，存放在 justoj 项目的 .env 文件中
 }
 
+// ClientName client name
 var ClientName string
+
+// WorkDir work directory
 var WorkDir string
+
+// Config instance
 var Config *config
 
 func init() {

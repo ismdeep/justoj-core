@@ -1,6 +1,6 @@
 module github.com/ismdeep/justoj-core
 
-go 1.17
+go 1.18
 
 require (
 	github.com/ismdeep/log v0.0.5

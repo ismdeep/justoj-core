@@ -1,5 +1,6 @@
 package main
 
+// SolutionInfo struct
 type SolutionInfo struct {
 	ID        string
 	ProblemID string
@@ -8,6 +9,7 @@ type SolutionInfo struct {
 	ContestID string
 }
 
+// ProblemInfo struct
 type ProblemInfo struct {
 	ID          string
 	TimeLimit   string
@@ -15,6 +17,7 @@ type ProblemInfo struct {
 	Spj         bool
 }
 
+// ResultInfo struct
 type ResultInfo struct {
 	Name   string `json:"name"`
 	Result int    `json:"result"`
@@ -22,6 +25,7 @@ type ResultInfo struct {
 	Mem    int64  `json:"mem"`
 }
 
+// SolutionResult struct
 type SolutionResult struct {
 	SolutionID     string
 	RunDir         string

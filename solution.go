@@ -10,6 +10,7 @@ import (
 	"strings"
 )
 
+// GenerateURL generate url
 func GenerateURL(uri string, params map[string]interface{}) string {
 	l := make([]string, 0)
 	l = append(l, fmt.Sprintf("client_name=%v", ClientName))
@@ -20,6 +21,7 @@ func GenerateURL(uri string, params map[string]interface{}) string {
 	return fmt.Sprintf("%v%v?%v", Config.BaseURL, uri, strings.Join(l, "&"))
 }
 
+// GetPendingSolutions get pending solutions
 func GetPendingSolutions() ([]string, error) {
 	ids := GetAvailableLanguageIDs()
 	if len(ids) <= 0 {
@@ -60,6 +62,7 @@ func GetPendingSolutions() ([]string, error) {
 	return results, nil
 }
 
+// GetSolutionInfo get solution info
 func GetSolutionInfo(solutionID string) (*SolutionInfo, error) {
 	h := &http.Client{}
 	resp, err := h.Get(GenerateURL("/api/judge_api/get_solution_info", map[string]interface{}{
@@ -85,6 +88,7 @@ func GetSolutionInfo(solutionID string) (*SolutionInfo, error) {
 	}, nil
 }
 
+// GetProblemInfo get problem info
 func GetProblemInfo(problemID string) (*ProblemInfo, error) {
 	h := &http.Client{}
 	resp, err := h.Get(GenerateURL("/api/judge_api/get_problem_info", map[string]interface{}{
@@ -110,6 +114,7 @@ func GetProblemInfo(problemID string) (*ProblemInfo, error) {
 	}, nil
 }
 
+// GetSolutionSourceCode get source code
 func GetSolutionSourceCode(solutionID string) (string, error) {
 	h := &http.Client{}
 	resp, err := h.Get(GenerateURL("/api/judge_api/get_solution", map[string]interface{}{
@@ -125,8 +130,8 @@ func GetSolutionSourceCode(solutionID string) (string, error) {
 	return string(content), nil
 }
 
+// UpdateSolutionResult update solution result
 func UpdateSolutionResult(res *SolutionResult) error {
-
 	if _, err := (&http.Client{}).Get(GenerateURL("/api/judge_api/update_solution", map[string]interface{}{
 		"sid":    res.SolutionID,
 		"result": res.Result,
