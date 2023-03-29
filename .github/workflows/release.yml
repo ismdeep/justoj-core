@@ -18,7 +18,7 @@ jobs:
       - name: Get dependencies
         run: go mod tidy
       - name: Docker release
-        uses: elgohr/Publish-Docker-Github-Action@main
+        uses: elgohr/Publish-Docker-Github-Action@v5
         with:
           name: ismdeep/justoj-core
           username: ${{ secrets.DOCKER_USERNAME }}
